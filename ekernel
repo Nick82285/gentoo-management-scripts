@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -xe
+olddir=$(pwd)
+
+source /usr/local/libexec/gentoo-management-scripts/utils/suidrequired
+source /usr/local/libexec/gentoo-management-scripts/kernel-common
+
+kernelnumber=$(kernelselectdialog)
+eselect kernel set "$kernelnumber"
+
+cd /usr/src/linux
+make menuconfig
+cd "$olddir"

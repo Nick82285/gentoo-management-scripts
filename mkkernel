@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -xe
+
+source /usr/local/libexec/gentoo-management-scripts/utils/suidrequired
+source /usr/local/libexec/gentoo-management-scripts/kernel-common
+
+olddir=$(pwd)
+oldgov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+export oldgov
+
+kernelnumber=$(kernelselectdialog)
+eselect kernel set $kernelnumber
+
+cpupower frequency-set --governor performance
+cd /usr/src/linux
+
+if [ "$1" != "--install-only" ]; then
+	make -j $CPUS -l $LOAD
+fi
+
+if [ $(rg --quiet 'nvidia-drivers' /var/lib/portage/world) -eq 0 ]; then
+	emerge --oneshot nvidia-drivers
+fi
+
+make -j $CPUS -l $LOAD modules_install
+make -j $CPUS -l $LOAD install
+
+cpupower frequency-set --governor $oldgov
+cd $olddir

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+detectSUIDAuthMethod() {
+
+	if [ -f /usr/bin/doas ]; then
+		auth="/usr/bin/doas"
+		echo $auth
+	elif [ -f /usr/bin/doas ]; then
+		auth="/usr/bin/sudo"            
+                echo $auth
+	else
+		auth="/bin/su"
+		echo $auth
+	fi
+}
+
+if [ "$(whoami)" != "root" ]
+then
+        auth=$(detectSUIDAuthMethod)
+	
+        echo "This script needs to be run as root"
+
+        if [ "$auth" = "/bin/su" ]; then
+		suoptions=" root -c "
+	fi
+
+	printf "Using %s for authentication\n" "$auth"
+	exec $auth $suoptions $0 $@
+fi

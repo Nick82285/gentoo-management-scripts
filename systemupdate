@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -xe
+
+source /usr/local/libexec/gentoo-management-scripts/utils/suidrequired
+
+oldgov=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+
+cleanup() {
+	echo "Resetting CPU Scaling Governor"
+	cpupower frequency-set --governor $oldgov
+}
+
+cpupower frequency-set --governor performance
+
+# Sync Repositories on hourly
+if [ "$1" != "--nosync" ]; then
+	emerge --sync
+ 
+# Probably do emerge --regen to speed up emerge operations
+
+# Update
+emerge @smart-live-rebuild
+fi
+
+emerge --update --autounmask-write --autounmask-continue --deep --changed-use --verbose --quiet-build --keep-going @world
+
+if [ "$?" -ne 0 ]; then
+	printf "Portage Emerge finished with errors: %s. Stopping merge to not remove newly built dependencies\n" "$?"
+	cleanup
+	exit 1
+fi
+
+emerge --depclean
+
+cleanup
