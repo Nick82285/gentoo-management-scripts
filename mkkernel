@@ -18,8 +18,7 @@ cd /usr/src/linux
 if [ "$1" != "--install-only" ]; then
 	make -j $CPUS -l $LOAD
 fi
-
-if [ $(rg --quiet 'nvidia-drivers' /var/lib/portage/world) -eq 0 ]; then
+if rg --quiet 'nvidia-drivers' /var/lib/portage/world; [ "$?" -eq 0 ]; then
 	emerge --oneshot nvidia-drivers
 fi
 
