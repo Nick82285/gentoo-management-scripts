@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 flags="-Wall -pipe"
 export PATH="$PATH:/usr/lib/llvm/17/bin"
 export LLVM=1

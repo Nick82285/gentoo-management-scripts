@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
 source /usr/local/libexec/gentoo-management-scripts/utils/suidrequired
 
@@ -16,8 +16,9 @@ cpupower frequency-set --governor performance
 # Sync Repositories on hourly
 if [ "$1" != "--nosync" ]; then
 	emerge --sync
- 
+
 # Probably do emerge --regen to speed up emerge operations
+emerge --regen
 
 # Update
 emerge @smart-live-rebuild

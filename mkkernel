@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xe
+set -e
 
 source /usr/local/libexec/gentoo-management-scripts/utils/suidrequired
 source /usr/local/libexec/gentoo-management-scripts/kernel-common
