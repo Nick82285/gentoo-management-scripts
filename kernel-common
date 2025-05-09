@@ -20,7 +20,7 @@ detectSUIDAuthMethod() {
 		auth="/usr/bin/doas"
 		echo $auth
 	elif [ -f /usr/bin/doas ]; then
-		auth="/usr/bin/sudo"            
+		auth="/usr/bin/sudo"
                 echo $auth
 	else
 		auth="/bin/su"
@@ -75,7 +75,7 @@ function trap_ctrlc ()
     echo "Ctrl-C caught...performing clean up"
  
     echo "Doing cleanup"
-    if [ ! -z $oldgov ]; then	
+    if [ ! -z $oldgov ]; then
     	cpupower frequency-set --governor $oldgov
     fi
     # exit shell script with error code 2

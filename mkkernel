@@ -12,7 +12,7 @@ export oldgov
 kernelnumber=$(kernelselectdialog)
 eselect kernel set $kernelnumber
 
-cpupower frequency-set --governor performance
+cpupower frequency-set --governor performance 2>&1 > /dev/null
 cd /usr/src/linux
 
 if [ "$1" != "--install-only" ]; then
