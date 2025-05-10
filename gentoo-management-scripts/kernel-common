@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
 
 set -e
-flags="-Wall -pipe"
-export PATH="$PATH:/usr/lib/llvm/17/bin"
+flags="-Wall -O3 -march=native -pipe"
+
+
+get_latest_llvm() {
+
+        llvms=($(ls "/usr/lib/llvm/"))
+
+        IFS=$'\n'
+        echo "${llvms[*]}" | sort -nr | head -n1
+        IFS=''
+
+}
+
+export PATH="$PATH:/usr/lib/llvm/$(get_latest_llvm)/bin"
 export LLVM=1
 export LLVM_IAS=1
 export INSTALL_MOD_STRIP=1
